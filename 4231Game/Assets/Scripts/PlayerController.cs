@@ -3,17 +3,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody rb;
-    public Transform playerObj;
     public float moveSpeed;
     public float rotateSpeed;
     private Vector2 moveDirection;
     public InputActionReference move;
+    public Animator animator;
+    private int runningID;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        runningID = Animator.StringToHash("running");
     }
 
     // Update is called once per frame
@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
         Vector3 relativeRight = cameraRight * moveDirection.x;
 
         Vector3 relativeMove = relativeForward + relativeRight;
+
+        animator.SetFloat(runningID, relativeMove.magnitude);
 
         transform.Translate(relativeMove * Time.deltaTime * moveSpeed, Space.World);
 

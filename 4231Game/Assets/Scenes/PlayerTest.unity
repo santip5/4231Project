@@ -527,6 +527,11 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!95 &1419713250 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5800283778753119853, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+  m_PrefabInstance: {fileID: 1035176974367112966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1588657353
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +960,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1419713250}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: moveSpeed
       value: 4
       objectReference: {fileID: 0}
@@ -1006,6 +1015,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5800283778753119853, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 23a8f8ec6b7e7a549b7c22651e4cad5a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
