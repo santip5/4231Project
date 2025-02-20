@@ -1,7 +1,13 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public Rigidbody rb;
+    public float moveSpeed;
+    private Vector2 moveDirection;
+    public InputActionReference move;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +17,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        moveDirection = move.action.ReadValue<Vector2>();
+        MoveRelativeToCamera();
+
+        Debug.Log(moveDirection);
+    }
+
+    void MoveRelativeToCamera()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 relativeForward = cameraForward * moveDirection.y;
+        Vector3 relativeRight = cameraRight * moveDirection.x;
+
+        Vector3 relativeMove = relativeForward + relativeRight;
+
+        transform.Translate(relativeMove * Time.deltaTime * moveSpeed, Space.World);
     }
 }
