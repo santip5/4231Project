@@ -4,7 +4,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody rb;
+    public Transform playerObj;
     public float moveSpeed;
+    public float rotateSpeed;
     private Vector2 moveDirection;
     public InputActionReference move;
 
@@ -38,5 +40,10 @@ public class PlayerController : MonoBehaviour
         Vector3 relativeMove = relativeForward + relativeRight;
 
         transform.Translate(relativeMove * Time.deltaTime * moveSpeed, Space.World);
+
+        if (moveDirection != Vector2.zero) {
+            Quaternion rotateTo = Quaternion.LookRotation(relativeMove, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateTo, rotateSpeed * Time.deltaTime);
+        }
     }
 }
