@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveDirection;
     public InputActionReference move;
     public Animator animator;
+    public CharacterController characterController;
+    
     private int runningID;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,8 +23,6 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = move.action.ReadValue<Vector2>();
         MoveRelativeToCamera();
-
-        Debug.Log(moveDirection);
     }
 
     void MoveRelativeToCamera()
@@ -41,11 +41,16 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat(runningID, relativeMove.magnitude);
 
-        transform.Translate(relativeMove * Time.deltaTime * moveSpeed, Space.World);
+        characterController.Move(relativeMove * Time.deltaTime * moveSpeed);
 
         if (moveDirection != Vector2.zero) {
             Quaternion rotateTo = Quaternion.LookRotation(relativeMove, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateTo, rotateSpeed * Time.deltaTime);
         }
+    }
+
+    public void OnFootstep()
+    {
+
     }
 }
