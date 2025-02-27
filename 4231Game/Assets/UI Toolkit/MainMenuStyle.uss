@@ -1,0 +1,49 @@
+.header {
+    font-size: 100px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/MainMenu.ttf?fileID=12800000&guid=b99a51e359589ec4f98b32c10cbb85a2&type=3#MainMenu");
+    -unity-text-align: upper-center;
+}
+
+.button {
+    font-size: 40px;
+    width: 500px;
+    height: 80px;
+    align-items: center;
+    align-content: center;
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/BaresFuturisticDemo-Regular.ttf?fileID=12800000&guid=74c86fbc2ab39bf44bf7358c5f5f43de&type=3#BaresFuturisticDemo-Regular");
+    align-self: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: rgb(17, 0, 255);
+    border-left-color: rgba(63, 0, 0, 0);
+    border-right-color: rgba(63, 0, 0, 0);
+    border-top-color: rgba(63, 0, 0, 0);
+    border-bottom-color: rgba(63, 0, 0, 0);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    margin-right: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    -unity-text-align: middle-center;
+    margin-bottom: 128px;
+    color: rgb(255, 255, 255);
+    transition-duration: 0.35s;
+}
+
+.button:hover {
+    scale: 1.1 1.1;
+    -unity-background-image-tint-color: rgb(255, 0, 0);
+    border-left-color: rgb(63, 0, 0);
+    border-right-color: rgb(63, 0, 0);
+    border-top-color: rgb(63, 0, 0);
+    border-bottom-color: rgb(63, 0, 0);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+}

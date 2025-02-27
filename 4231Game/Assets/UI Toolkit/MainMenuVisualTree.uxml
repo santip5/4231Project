@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=b7cd74cfcb6ee954c9a6ae8c2a85ad43&amp;type=3#MainMenuStyle" />
+    <engine:VisualElement name="Container" style="flex-grow: 1; background-color: rgb(47, 43, 103); -unity-background-image-tint-color: rgb(243, 3, 3);">
+        <engine:Label text="Robot Rumble Arena" class="header" style="-unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/MainMenu.ttf?fileID=12800000&amp;guid=b99a51e359589ec4f98b32c10cbb85a2&amp;type=3#MainMenu&quot;);" />
+        <engine:Button text="New Run" name="NewRunButton" class="button" />
+        <engine:Button text="Settings" name="Settings" class="button" />
+        <engine:Button text="Quit to Desktop" name="QuitGameButton" class="button" />
+    </engine:VisualElement>
+</engine:UXML>
