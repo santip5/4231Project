@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float rotateSpeed;
     private Vector2 moveDirection;
     public InputActionReference move;
+    public InputActionReference attack;
     public Animator animator;
     public CharacterController characterController;
     
@@ -23,6 +24,11 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = move.action.ReadValue<Vector2>();
         MoveRelativeToCamera();
+
+        if (attack.action.WasPerformedThisFrame())
+        {
+            animator.SetTrigger("Test");
+        }
     }
 
     void MoveRelativeToCamera()
