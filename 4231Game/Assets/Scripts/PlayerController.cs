@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IAttacker
 {
     public float moveSpeed;
     public float rotateSpeed;
@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public InputActionReference attack;
     public Animator animator;
     public CharacterController characterController;
+    public Collider rightFootAttack;
+
+    public attack currentAttack;
     
     private int runningID;
 
@@ -58,5 +61,12 @@ public class PlayerController : MonoBehaviour
     public void OnFootstep()
     {
 
+    }
+
+    public void attackCollision(attackerIdentifier ID, Collider collision)
+    {
+        if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit)) {
+            hit.hit(currentAttack);
+        }
     }
 }
