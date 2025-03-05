@@ -14,12 +14,16 @@ public class PlayerController : MonoBehaviour, IAttacker
 
     public attack currentAttack;
     
-    private int runningID;
+    private int animID_running;
+    private int animID_attack;
+    private int animID_attackID;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        runningID = Animator.StringToHash("running");
+        animID_running = Animator.StringToHash("running");
+        animID_attack = Animator.StringToHash("Attack");
+        animID_attackID = Animator.StringToHash("AttackID");
     }
 
     // Update is called once per frame
@@ -30,7 +34,8 @@ public class PlayerController : MonoBehaviour, IAttacker
 
         if (attack.action.WasPerformedThisFrame())
         {
-            animator.SetTrigger("Test");
+            animator.SetTrigger(animID_attack);
+            animator.SetInteger(animID_attackID, currentAttack.attackID);
         }
     }
 
@@ -48,7 +53,7 @@ public class PlayerController : MonoBehaviour, IAttacker
 
         Vector3 relativeMove = relativeForward + relativeRight;
 
-        animator.SetFloat(runningID, relativeMove.magnitude);
+        animator.SetFloat(animID_running, relativeMove.magnitude);
 
         characterController.Move(relativeMove * Time.deltaTime * moveSpeed);
 
