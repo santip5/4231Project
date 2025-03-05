@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,22 +19,29 @@ public class PlayerController : MonoBehaviour, IAttacker
     private int animID_attack;
     private int animID_attackID;
 
+    [DoNotSerialize]
+    public bool attacking;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animID_running = Animator.StringToHash("running");
         animID_attack = Animator.StringToHash("Attack");
         animID_attackID = Animator.StringToHash("AttackID");
+
+        attacking = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveDirection = move.action.ReadValue<Vector2>();
-        MoveRelativeToCamera();
+        if (!attacking) {
+            moveDirection = move.action.ReadValue<Vector2>();
+            MoveRelativeToCamera();
+        }
 
         if (attack.action.WasPerformedThisFrame())
         {
+            attacking = true;
             animator.SetTrigger(animID_attack);
             animator.SetInteger(animID_attackID, currentAttack.attackID);
         }
