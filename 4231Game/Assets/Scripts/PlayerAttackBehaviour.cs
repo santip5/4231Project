@@ -1,12 +1,26 @@
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttackBehaviour : StateMachineBehaviour
 {
+    [SerializeField]
+    private attackerIdentifier hitBoxID;
+    private AttackCollision hitBox;
+
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        Component[] hitboxes = animator.GetComponentsInChildren<AttackCollision>(false);
+
+        foreach (AttackCollision hitbox in hitboxes)
+        {
+            if (hitbox.ID == hitBoxID)
+            {
+                hitBox = hitbox;
+                hitBox.active = true;
+            }
+        }
+    }
 
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,6 +33,8 @@ public class PlayerAttackBehaviour : StateMachineBehaviour
     {
         animator.gameObject.GetComponent<PlayerController>().attacking = false;
         animator.gameObject.GetComponent<PlayerController>().doNotIcrementAttacks = false;
+
+        hitBox.active = false;
     }
 
     // OnStateMove is called before OnStateMove is called on any state inside this state machine

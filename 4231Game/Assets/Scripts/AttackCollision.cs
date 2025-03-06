@@ -16,7 +16,6 @@ public class AttackCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Collision!");
         if (active && attackerI != null)
         {
             attackerI.attackCollision(ID, collision);
