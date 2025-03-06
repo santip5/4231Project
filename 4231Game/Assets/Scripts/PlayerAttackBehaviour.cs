@@ -18,6 +18,7 @@ public class PlayerAttackBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.gameObject.GetComponent<PlayerController>().attacking = false;
+        animator.gameObject.GetComponent<PlayerController>().doNotIcrementAttacks = false;
     }
 
     // OnStateMove is called before OnStateMove is called on any state inside this state machine

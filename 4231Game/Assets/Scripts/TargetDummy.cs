@@ -14,7 +14,7 @@ public class TargetDummy : MonoBehaviour, IHittable
     {
 
     }
-    public void hit(attack attack)
+    public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
     }

@@ -1212,11 +1212,67 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: currentAttack.revenge
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: currentAttack.isSpecial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: Attack1IDList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: 'Attack1IDList.Array.data[0]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: 'Attack1IDList.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: 'Attack1IDList.Array.data[2]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[0].stun
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[1].stun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[0].damage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[1].damage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[0].revenge
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[1].revenge
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[1].attackID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[0].isSpecial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: attackList.Array.data[1].isSpecial
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 476980827443928087, guid: 978229480925a8042ae4a334e99d999e, type: 3}
@@ -1287,6 +1343,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 23a8f8ec6b7e7a549b7c22651e4cad5a, type: 2}
+    - target: {fileID: 5800283778753119853, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7843477331938930244, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.29289

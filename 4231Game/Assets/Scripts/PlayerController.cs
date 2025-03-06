@@ -1,3 +1,6 @@
+using System.IO;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,14 +16,20 @@ public class PlayerController : MonoBehaviour, IAttacker
     public CharacterController characterController;
     public Collider rightFootAttack;
 
-    public attack currentAttack;
-    
+    public Attack currentAttack;
+    public List<Attack> attackList;
+    public int[] Attack1IDList;
+    //public int[] Attack2IDList;
+    private int attackIndex;
+
     private int animID_running;
     private int animID_attack;
     private int animID_attackID;
 
     [DoNotSerialize]
     public bool attacking;
+    [DoNotSerialize]
+    public bool doNotIcrementAttacks;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +38,9 @@ public class PlayerController : MonoBehaviour, IAttacker
         animID_attackID = Animator.StringToHash("AttackID");
 
         attacking = false;
+        doNotIcrementAttacks = false;
+        attackIndex = 0;
+        LoadAttackList();
     }
 
     // Update is called once per frame
@@ -41,9 +53,27 @@ public class PlayerController : MonoBehaviour, IAttacker
 
         if (attack.action.WasPerformedThisFrame())
         {
-            attacking = true;
+            currentAttack = attackList[Attack1IDList[attackIndex]];
+
             animator.SetTrigger(animID_attack);
             animator.SetInteger(animID_attackID, currentAttack.attackID);
+
+            if (!doNotIcrementAttacks)
+            {
+                attackIndex++;
+
+                if (attackIndex > Attack1IDList.Length - 1)
+                {
+                    attackIndex = 0;
+                }
+
+                if(attacking)
+                {
+                    doNotIcrementAttacks = true;
+                }
+            }
+
+            attacking = true;
         }
     }
 
@@ -81,5 +111,34 @@ public class PlayerController : MonoBehaviour, IAttacker
         if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit)) {
             hit.hit(currentAttack);
         }
+    }
+    
+    /* Failed to get JSON to work with structs, hard coding for now
+    private void SaveAttackList()
+    {
+        string json = JsonUtility.ToJson(attackList);
+        using (StreamWriter writer = new StreamWriter(Application.dataPath + Path.AltDirectorySeparatorChar + "AttackData.json"))
+        {
+            writer.Write(json);
+        }
+    }
+    */
+
+    private void LoadAttackList()
+    {
+        /* Failed to get JSON working with structs, hard coding for now
+        string json = string.Empty;
+        using (StreamReader reader = new StreamReader(Application.dataPath + Path.AltDirectorySeparatorChar + "AtttackData.json"))
+        {
+            json = reader.ReadToEnd();
+        }
+
+        attackList = JsonUtility.FromJson<List<Attack>>(json);
+        */
+
+        attackList = new List<Attack>();
+        attackList.Add(new Attack(10, 2, 1, false, 0));
+        attackList.Add(new Attack(20, 1, 3, false, 1));
+        attackList.Add(new Attack(30, 0, 5, false, 2));
     }
 }
