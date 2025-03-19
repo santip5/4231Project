@@ -1011,6 +1011,10 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: a7fa87652e796e149bcf74bfcbfdef8f, type: 3}
+    - target: {fileID: 8894231531189202370, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

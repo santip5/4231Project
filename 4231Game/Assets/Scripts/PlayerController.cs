@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, IAttacker
+public class PlayerController : MonoBehaviour, IAttacker, IHittable
 {
     public float moveSpeed;
     public float rotateSpeed;
@@ -140,5 +140,10 @@ public class PlayerController : MonoBehaviour, IAttacker
         attackList.Add(new Attack(10, 2, 1, false, 0));
         attackList.Add(new Attack(20, 1, 3, false, 1));
         attackList.Add(new Attack(30, 0, 5, false, 2));
+    }
+
+    public void hit(Attack attack)
+    {
+        Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
     }
 }
