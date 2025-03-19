@@ -40,10 +40,10 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     // Update is called once per frame
     void Update()
     {
-        do_Attacks();
+        //do_Attacks();
     }
 
-    private void do_Attacks()
+    public void do_Attacks()
     {
         if (!attacking)
         {
