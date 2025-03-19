@@ -838,6 +838,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: 'Attack1IDList.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
+      propertyPath: 'Attack1IDList.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 476980827443928087, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
