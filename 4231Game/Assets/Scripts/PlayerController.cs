@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     private Vector2 moveDirection;
     public InputActionReference move;
     public InputActionReference attack;
+    public InputActionReference dash;
     public Animator animator;
     public CharacterController characterController;
     public Collider rightFootAttack;
@@ -26,11 +27,17 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     private int animID_attack;
     private int animID_attackID;
     private int animID_hit;
+    private int animID_dash;
+    private int animID_armBlock;
 
     [DoNotSerialize]
     public bool attacking;
     [DoNotSerialize]
     public bool doNotIcrementAttacks;
+    [DoNotSerialize]
+    public bool dashing;
+    [DoNotSerialize]
+    public bool dashSpeedOn;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,9 +45,12 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         animID_attack = Animator.StringToHash("Attack");
         animID_attackID = Animator.StringToHash("AttackID");
         animID_hit = Animator.StringToHash("hit");
+        animID_dash = Animator.StringToHash("dash");
+        animID_armBlock = Animator.StringToHash("ArmBlock");
 
         attacking = false;
         doNotIcrementAttacks = false;
+        dashing = false;
         attackIndex = 0;
         LoadAttackList();
     }
@@ -48,12 +58,23 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     // Update is called once per frame
     void Update()
     {
-        if (!attacking) {
+        if (!attacking)
+        {
             moveDirection = move.action.ReadValue<Vector2>();
+
+            if (dashSpeedOn)
+            {
+                if (moveDirection.magnitude == 0)
+                {
+                    moveDirection = transform.forward;
+                }
+                moveDirection *= 2;
+            }
+
             MoveRelativeToCamera();
         }
 
-        if (attack.action.WasPerformedThisFrame())
+        if (attack.action.WasPerformedThisFrame() && !dashing)
         {
             currentAttack = attackList[Attack1IDList[attackIndex]];
 
@@ -69,13 +90,20 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
                     attackIndex = 0;
                 }
 
-                if(attacking)
+                if (attacking)
                 {
                     doNotIcrementAttacks = true;
                 }
             }
 
             attacking = true;
+        }
+
+        if (!attacking && !dashing && dash.action.WasPerformedThisFrame())
+        {
+            dashing = true;
+            animator.SetTrigger(animID_dash);
+            animator.SetTrigger(animID_armBlock);
         }
     }
 
@@ -97,7 +125,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
 
         characterController.Move(relativeMove * Time.deltaTime * moveSpeed);
 
-        if (moveDirection != Vector2.zero) {
+        if (moveDirection != Vector2.zero)
+        {
             Quaternion rotateTo = Quaternion.LookRotation(relativeMove, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateTo, rotateSpeed * Time.deltaTime);
         }
@@ -110,11 +139,12 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
 
     public void attackCollision(attackerIdentifier ID, Collider collision)
     {
-        if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit)) {
+        if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit))
+        {
             hit.hit(currentAttack);
         }
     }
-    
+
     /* Failed to get JSON to work with structs, hard coding for now
     private void SaveAttackList()
     {
@@ -146,7 +176,15 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
 
     public void hit(Attack attack)
     {
-        Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
-        animator.SetTrigger(animID_hit);
+        if (!dashing)
+        {
+            Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+            animator.SetTrigger(animID_hit);
+        }
+    }
+
+    public void DashSpeed()
+    {
+        dashSpeedOn = !dashSpeedOn;
     }
 }
