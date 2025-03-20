@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     private int animID_running;
     private int animID_attack;
     private int animID_attackID;
+    private int animID_hit;
 
     [DoNotSerialize]
     public bool attacking;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         animID_running = Animator.StringToHash("running");
         animID_attack = Animator.StringToHash("Attack");
         animID_attackID = Animator.StringToHash("AttackID");
+        animID_hit = Animator.StringToHash("hit");
 
         attacking = false;
         doNotIcrementAttacks = false;
@@ -145,5 +147,6 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+        animator.SetTrigger(animID_hit);
     }
 }
