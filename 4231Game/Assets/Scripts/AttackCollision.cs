@@ -19,6 +19,7 @@ public class AttackCollision : MonoBehaviour
         if (active && attackerI != null)
         {
             attackerI.attackCollision(ID, collision);
+            active = false;
         }
     }
 }
