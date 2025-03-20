@@ -16,6 +16,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
     private int animID_attackID;
     private int animID_attack;
+    private int animID_hit;
+    private int animID_Fullhit;
 
     public List<Attack> attackList;
     
@@ -25,6 +27,14 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+
+        if(attacking)
+        {
+            animator.SetTrigger(animID_hit);
+        } else
+        {
+            animator.SetTrigger(animID_Fullhit);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,6 +47,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         animator = GetComponent<Animator>();
         animID_attackID = Animator.StringToHash("attackID");
         animID_attack = Animator.StringToHash("attack");
+        animID_hit = Animator.StringToHash("Hit");
+        animID_Fullhit = Animator.StringToHash("FullHit");
     }
 
     // Update is called once per frame
