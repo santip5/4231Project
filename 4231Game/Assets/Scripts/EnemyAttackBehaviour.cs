@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAttackBehaviour : StateMachineBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Component[] hitboxes = animator.GetComponentsInChildren<AttackCollision>(false);
+        animator.GetComponentInParent<NavMeshAgent>(false).isStopped = true;
 
         foreach (AttackCollision hitbox in hitboxes)
         {
@@ -33,6 +35,8 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
         animator.gameObject.GetComponent<EnemyLogic>().attacking = false;
 
         hitBox.active = false;
+
+        animator.GetComponentInParent<NavMeshAgent>(false).isStopped = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

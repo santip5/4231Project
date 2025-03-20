@@ -793,7 +793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 363371114}
-  attack_distance: 2
+  attack_distance: 1.4
 --- !u!195 &725842479
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1719,6 +1719,10 @@ PrefabInstance:
     - target: {fileID: 8229506618640980565, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: 'attacks_1.Array.data[1]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8894231531189202370, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: m_Avatar

@@ -7,6 +7,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 {
     public int[] attacks_1 = new int[3];
     public int[] attacks_2 = new int[3];
+
+    [SerializeField]
     private int attackID = 0;
 
     [SerializeField]
@@ -47,6 +49,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     {
         if (!attacking)
         {
+            attacking = true;
+
             animator.SetTrigger(animID_attack);
             animator.SetInteger(animID_attackID, attacks_1[attackID]);
 

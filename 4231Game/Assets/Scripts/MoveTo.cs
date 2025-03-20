@@ -8,6 +8,7 @@ public class MoveTo : MonoBehaviour
     public float attack_distance;
 
     private Animator animator;
+    private int animID_moveSpeed;
     private NavMeshAgent agent;
     private EnemyLogic enemyLogic;
 
@@ -15,8 +16,10 @@ public class MoveTo : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         enemyLogic = GetComponent<EnemyLogic>();
+
+        animator = GetComponent<Animator>();
+        animID_moveSpeed = Animator.StringToHash("moveSpeed");
 
         agent.stoppingDistance = attack_distance;
     }
@@ -25,12 +28,12 @@ public class MoveTo : MonoBehaviour
     {
         if (Vector3.Distance(agent.transform.position, goal.position) < attack_distance)
         {
-            agent.isStopped = true;
             enemyLogic.do_Attacks();
         } else
         {
-            agent.isStopped = false;
             agent.destination = goal.position;
         }
+
+        animator.SetFloat(animID_moveSpeed,agent.velocity.magnitude);
     }
 }
