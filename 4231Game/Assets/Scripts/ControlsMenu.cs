@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Drawing;
 
 public class ControlsMenu : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class ControlsMenu : MonoBehaviour
     private Button testButton;
     private Button confirmButton;
     private ControlsDummy playerAttackSequence;
+    private int[] selectedAttacks = new int[3];
+    public SaveManager SaveManager;
 
     private List<string> moveOptions = new List<string> { "Attack 1", "Attack 2", "Attack 3" };
 
@@ -41,6 +44,11 @@ public class ControlsMenu : MonoBehaviour
             int attack2 = slot2.index;
             int attack3 = slot3.index;
 
+            selectedAttacks[0] = attack1;
+            selectedAttacks[1] = attack2;
+            selectedAttacks[2] = attack3;
+            SaveManager.Instance.passedAttacks = selectedAttacks;
+
             Debug.Log($" Sending order: {attack1}, {attack2}, {attack3}");
 
             playerAttackSequence.SetAttackOrder(attack1, attack2, attack3);
@@ -51,6 +59,13 @@ public class ControlsMenu : MonoBehaviour
     private void ConfirmClick(ClickEvent evt)
     {
         Debug.Log("You pressed the confirm button");
+        int attack1 = slot1.index;
+        int attack2 = slot2.index;
+        int attack3 = slot3.index;
+        selectedAttacks[0] = attack1;
+        selectedAttacks[1] = attack2;
+        selectedAttacks[2] = attack3;
+        SaveManager.Instance.passedAttacks = selectedAttacks;
         SceneManager.LoadScene("PlayerTest");
     }
 }

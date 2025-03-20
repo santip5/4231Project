@@ -27,6 +27,8 @@ public class ControlsDummy : MonoBehaviour
         selectedAttacks[1] = Attack1IDList[attack2];
         selectedAttacks[2] = Attack1IDList[attack3];
 
+
+
         Debug.Log($" Attack Order Set: {selectedAttacks[0]}, {selectedAttacks[1]}, {selectedAttacks[2]}");
     }
 

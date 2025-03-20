@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IAttacker, IHittable
 {
+    public SaveManager SaveManager;
+
     public float moveSpeed;
     public float rotateSpeed;
     private Vector2 moveDirection;
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
 
         if (attack.action.WasPerformedThisFrame() && !dashing)
         {
-            currentAttack = attackList[Attack1IDList[attackIndex]];
+            currentAttack = attackList[SaveManager.Instance.passedAttacks[attackIndex]];
 
             animator.SetTrigger(animID_attack);
             animator.SetInteger(animID_attackID, currentAttack.attackID);
