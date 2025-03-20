@@ -1,0 +1,11 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/ControlsMenuStyle.uss?fileID=7433441132597879392&amp;guid=a493f6cd6ac20bf44895334e337656f0&amp;type=3#ControlsMenuStyle" />
+    <engine:VisualElement name="Controls" style="flex-grow: 1; position: absolute; width: 50%; height: 100%; background-color: rgb(84, 118, 195); -unity-background-image-tint-color: rgb(0, 0, 0); background-image: none;">
+        <engine:Label text="Move Selection" name="Title" style="align-self: center; align-content: center; font-size: 56px; -unity-font-style: bold; margin-bottom: -27px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/MainMenu.ttf?fileID=12800000&amp;guid=b99a51e359589ec4f98b32c10cbb85a2&amp;type=3#MainMenu&quot;);" />
+        <engine:DropdownField label="Slot 1" name="Slot1" class="moveSlot" />
+        <engine:DropdownField label="Slot 2" name="Slot2" class="moveSlot" />
+        <engine:DropdownField label="Slot 3" name="Slot3" class="moveSlot" />
+        <engine:Button text="Test" name="TestButton" class="button" />
+        <engine:Button text="Confirm" name="ConfirmButton" class="button" />
+    </engine:VisualElement>
+</engine:UXML>
