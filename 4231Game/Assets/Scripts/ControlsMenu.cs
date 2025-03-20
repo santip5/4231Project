@@ -66,6 +66,6 @@ public class ControlsMenu : MonoBehaviour
         selectedAttacks[1] = attack2;
         selectedAttacks[2] = attack3;
         SaveManager.Instance.passedAttacks = selectedAttacks;
-        SceneManager.LoadScene("PlayerTest");
+        SceneManager.LoadScene("Merged Scene");
     }
 }
