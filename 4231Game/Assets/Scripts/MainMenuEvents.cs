@@ -29,7 +29,7 @@ public class MainMenuEvents : MonoBehaviour
     private void NewRunClick(ClickEvent evt)
     {
         Debug.Log("You pressed the new run button");
-        SceneManager.LoadScene("MenuTest");
+        SceneManager.LoadScene("ControlsTest");
     }
 
     private void QuitClick(ClickEvent evt)
