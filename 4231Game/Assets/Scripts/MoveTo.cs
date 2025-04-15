@@ -12,6 +12,9 @@ public class MoveTo : MonoBehaviour
     private NavMeshAgent agent;
     private EnemyLogic enemyLogic;
 
+    private bool playerDead;
+    private bool dead;
+
 
     void Start()
     {
@@ -22,18 +25,49 @@ public class MoveTo : MonoBehaviour
         animID_moveSpeed = Animator.StringToHash("moveSpeed");
 
         agent.stoppingDistance = attack_distance;
+
+        playerDead = false;
+        PlayerController.OnPlayerDied += PlayerDies;
+
+        EnemyLogic.OnEnemyDied += Die;
+
+        dead = false;
     }
 
     private void Update()
     {
-        if (Vector3.Distance(agent.transform.position, goal.position) < attack_distance)
+        if (!dead)
         {
-            enemyLogic.do_Attacks();
-        } else
-        {
-            agent.destination = goal.position;
+            if (playerDead)
+            {
+                agent.destination = new Vector3(0, 0, 0);
+            }
+            else if (Vector3.Distance(agent.transform.position, goal.position) < attack_distance)
+            {
+                enemyLogic.do_Attacks();
+            }
+            else
+            {
+                agent.destination = goal.position;
+            } 
         }
 
         animator.SetFloat(animID_moveSpeed,agent.velocity.magnitude);
+    }
+    void OnDisable()
+    {
+        PlayerController.OnPlayerDied -= PlayerDies;
+        EnemyLogic.OnEnemyDied -= Die;
+    }
+
+    public void PlayerDies()
+    {
+        playerDead = true;
+    }
+
+    public void Die()
+    {
+        dead = true;
+        agent.isStopped = true;
     }
 }

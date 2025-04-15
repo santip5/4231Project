@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static PlayerController;
 
 public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 {
@@ -18,24 +19,19 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     private int animID_attack;
     private int animID_hit;
     private int animID_Fullhit;
+    private int animID_dead;
 
     public List<Attack> attackList;
     
     [DoNotSerialize]
     public bool attacking;
 
-    public void hit(Attack attack)
-    {
-        Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+    public int hitpoints_max;
+    private int hitpoints;
+    private bool dead;
 
-        if(attacking)
-        {
-            animator.SetTrigger(animID_hit);
-        } else
-        {
-            animator.SetTrigger(animID_Fullhit);
-        }
-    }
+    public static event Death OnEnemyDied;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,6 +45,12 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         animID_attack = Animator.StringToHash("attack");
         animID_hit = Animator.StringToHash("Hit");
         animID_Fullhit = Animator.StringToHash("FullHit");
+        animID_dead = Animator.StringToHash("Dead");
+
+
+        hitpoints = hitpoints_max;
+        dead = false;
+        OnEnemyDied += Die;
     }
 
     // Update is called once per frame
@@ -57,9 +59,15 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         //do_Attacks();
     }
 
+    void OnDisable()
+    {
+        OnEnemyDied -= Die;
+    }
+
+
     public void do_Attacks()
     {
-        if (!attacking)
+        if (!attacking && !dead)
         {
             attacking = true;
 
@@ -72,6 +80,24 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
             {
                 attackID = 0;
             }
+        }
+    }
+    public void hit(Attack attack)
+    {
+        Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+
+        if(attacking)
+        {
+            animator.SetTrigger(animID_hit);
+        } else
+        {
+            animator.SetTrigger(animID_Fullhit);
+        }
+
+        hitpoints -= attack.damage;
+        if(hitpoints <= 0)
+        {
+            OnEnemyDied?.Invoke();
         }
     }
 
@@ -88,5 +114,11 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             hit.hit(attackList[attacks_1[attackID]]);
         }
+    }
+
+    private void Die()
+    {
+        dead = true;
+        animator.SetBool(animID_dead, true);
     }
 }
