@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using static PlayerController;
 
 public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 {
     public int[] attacks_1 = new int[3];
     public int[] attacks_2 = new int[3];
+    private int attack_sequence;
+    private int current_attack;
 
     [SerializeField]
     private int attackID = 0;
@@ -20,15 +23,23 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     private int animID_hit;
     private int animID_Fullhit;
     private int animID_dead;
+    private int animID_tired;
 
     public List<Attack> attackList;
     
     [DoNotSerialize]
     public bool attacking;
+    [DoNotSerialize]
+    public bool tired;
 
     public int hitpoints_max;
     private int hitpoints;
     private bool dead;
+
+    public Transform target;
+    public float rotateSpeed;
+
+    private NavMeshAgent agent;
 
     public static event Death OnEnemyDied;
 
@@ -37,8 +48,10 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     void Start()
     {
         attacking = false;
+        tired = false;
 
         init_attacks();
+        attack_sequence = 1;
 
         animator = GetComponent<Animator>();
         animID_attackID = Animator.StringToHash("attackID");
@@ -46,6 +59,9 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         animID_hit = Animator.StringToHash("Hit");
         animID_Fullhit = Animator.StringToHash("FullHit");
         animID_dead = Animator.StringToHash("Dead");
+        animID_tired = Animator.StringToHash("Tired");
+
+        agent = GetComponent<NavMeshAgent>();
 
 
         hitpoints = hitpoints_max;
@@ -56,7 +72,10 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     // Update is called once per frame
     void Update()
     {
-        //do_Attacks();
+        if (!tired && !dead && agent.isStopped)
+        {
+            transform.LookAt(target);
+        }
     }
 
     void OnDisable()
@@ -67,18 +86,40 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
     public void do_Attacks()
     {
-        if (!attacking && !dead)
+        if(tired && !attacking)
+        {
+            animator.SetTrigger(animID_tired);
+            attacking = true;
+        }
+        else if (!attacking && !dead)
         {
             attacking = true;
 
             animator.SetTrigger(animID_attack);
-            animator.SetInteger(animID_attackID, attacks_1[attackID]);
+
+            if (attack_sequence == 1)
+            {
+                current_attack = attacks_1[attackID];
+            }
+            else if (attack_sequence == 2)
+            {
+                current_attack = attacks_2[attackID];
+            }
+
+            animator.SetInteger(animID_attackID, current_attack);
+
 
             attackID++;
 
             if(attackID >= attacks_1.Length || attackID >= attacks_2.Length)
             {
                 attackID = 0;
+                tired = true;
+
+                //Get a random attack sequence. Use of range can be adjusted to allow for different probabilities, butfor now is uniform
+                int r = UnityEngine.Random.Range(0, 2);
+                if (r == 0) attack_sequence = 1;
+                else if (r == 1) attack_sequence = 2;
             }
         }
     }
@@ -106,13 +147,14 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         attackList = new List<Attack>();
         attackList.Add(new Attack(10, 2, 1, false, 0));
         attackList.Add(new Attack(15, 3, 2, false, 0));
+        attackList.Add(new Attack(10, 2, 0, false, 0));
     }
 
     public void attackCollision(attackerIdentifier ID, Collider collision)
     {
         if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit))
         {
-            hit.hit(attackList[attacks_1[attackID]]);
+            hit.hit(attackList[current_attack]);
         }
     }
 

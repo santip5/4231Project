@@ -1508,7 +1508,7 @@ PrefabInstance:
       objectReference: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: hitpoints_max
-      value: 100
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
       propertyPath: 'Attack1IDList.Array.data[0]'
@@ -1729,12 +1729,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 363371114}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: rotateSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: hitpoints_max
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: 'attacks_1.Array.data[1]'
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: 'attacks_1.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: 'attacks_2.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: 'attacks_2.Array.data[2]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8894231531189202370, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: m_Avatar
