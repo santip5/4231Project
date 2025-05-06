@@ -7,7 +7,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IAttacker, IHittable
 {
-    public SaveManager SaveManager;
+    //public SaveManager SaveManager;
+    public int hitpoints_max;
+    private int hitpoints;
+    private bool pause_input;
 
     public float moveSpeed;
     public float rotateSpeed;
@@ -31,6 +34,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     private int animID_hit;
     private int animID_dash;
     private int animID_armBlock;
+    private int animID_dead;
+    private int animID_victory;
 
     [DoNotSerialize]
     public bool attacking;
@@ -40,6 +45,13 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     public bool dashing;
     [DoNotSerialize]
     public bool dashSpeedOn;
+
+    [SerializeField] private RectTransform healthFillRect;
+    [SerializeField] private float maxWidth = 500f;
+
+    public delegate void Death();
+    public static event Death OnPlayerDied;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,64 +61,85 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         animID_hit = Animator.StringToHash("hit");
         animID_dash = Animator.StringToHash("dash");
         animID_armBlock = Animator.StringToHash("ArmBlock");
+        animID_dead = Animator.StringToHash("Dead");
+        animID_victory = Animator.StringToHash("Victory");
 
         attacking = false;
         doNotIcrementAttacks = false;
         dashing = false;
         attackIndex = 0;
         LoadAttackList();
+
+        hitpoints = hitpoints_max;
+        pause_input = false;
+        OnPlayerDied += Die;
+        EnemyLogic.OnEnemyDied += VictoryAnim;
+
+        maxWidth = healthFillRect.rect.width;
+    }
+
+    void OnDisable()
+    {
+        OnPlayerDied -= Die;
+        EnemyLogic.OnEnemyDied -= VictoryAnim;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!attacking)
+        if (!pause_input)
         {
-            moveDirection = move.action.ReadValue<Vector2>();
-
-            if (dashSpeedOn)
+            if (!attacking)
             {
-                if (moveDirection.magnitude == 0)
+                moveDirection = move.action.ReadValue<Vector2>();
+
+                if (dashSpeedOn)
                 {
-                    moveDirection = transform.forward;
+                    if (moveDirection.magnitude == 0)
+                    {
+                        moveDirection = transform.forward;
+                    }
+                    moveDirection *= 2;
                 }
-                moveDirection *= 2;
+
+                MoveRelativeToCamera();
             }
 
-            MoveRelativeToCamera();
-        }
-
-        if (attack.action.WasPerformedThisFrame() && !dashing)
-        {
-            currentAttack = attackList[SaveManager.Instance.passedAttacks[attackIndex]];
-
-            animator.SetTrigger(animID_attack);
-            animator.SetInteger(animID_attackID, currentAttack.attackID);
-
-            if (!doNotIcrementAttacks)
+            if (attack.action.WasPerformedThisFrame() && !dashing)
             {
-                attackIndex++;
+                currentAttack = attackList[Attack1IDList[attackIndex]];
 
-                if (attackIndex > Attack1IDList.Length - 1)
+                animator.SetTrigger(animID_attack);
+                animator.SetInteger(animID_attackID, currentAttack.attackID);
+
+                if (!doNotIcrementAttacks)
                 {
-                    attackIndex = 0;
+                    attackIndex++;
+
+                    if (attackIndex > Attack1IDList.Length - 1)
+                    {
+                        attackIndex = 0;
+                    }
+
+                    if (attacking)
+                    {
+                        doNotIcrementAttacks = true;
+                    }
                 }
 
-                if (attacking)
-                {
-                    doNotIcrementAttacks = true;
-                }
+                attacking = true;
             }
 
-            attacking = true;
+            if (!attacking && !dashing && dash.action.WasPerformedThisFrame())
+            {
+                dashing = true;
+                animator.SetTrigger(animID_dash);
+                animator.SetTrigger(animID_armBlock);
+            } 
         }
 
-        if (!attacking && !dashing && dash.action.WasPerformedThisFrame())
-        {
-            dashing = true;
-            animator.SetTrigger(animID_dash);
-            animator.SetTrigger(animID_armBlock);
-        }
+        float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
+        healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
     }
 
     void MoveRelativeToCamera()
@@ -182,11 +215,37 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         {
             Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
             animator.SetTrigger(animID_hit);
+            hitpoints -= attack.damage;
+        }
+
+        if(hitpoints <= 0)
+        {
+            OnPlayerDied?.Invoke();
         }
     }
 
     public void DashSpeed()
     {
         dashSpeedOn = !dashSpeedOn;
+    }
+    
+    private void Die()
+    {
+        pause_input = true;
+        animator.SetBool(animID_dead, true);
+    }
+
+    private void VictoryAnim()
+    {
+        pause_input = true;
+        animator.SetFloat(animID_running, 0);
+        StartCoroutine(TriggerVictory());
+    }
+
+    IEnumerator TriggerVictory()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        animator.SetTrigger(animID_victory);
     }
 }
