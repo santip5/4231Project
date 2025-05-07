@@ -26,11 +26,14 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     private int animID_tired;
 
     public List<Attack> attackList;
-    
+
     [DoNotSerialize]
     public bool attacking;
     [DoNotSerialize]
     public bool tired;
+
+    [SerializeField] private RectTransform healthFillRect;
+    [SerializeField] private float maxWidth = 500f;
 
     public int hitpoints_max;
     private int hitpoints;
@@ -67,6 +70,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         hitpoints = hitpoints_max;
         dead = false;
         OnEnemyDied += Die;
+
+        maxWidth = healthFillRect.rect.width;
     }
 
     // Update is called once per frame
@@ -76,6 +81,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             transform.LookAt(target);
         }
+        float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
+        healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
     }
 
     void OnDisable()
@@ -86,7 +93,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
     public void do_Attacks()
     {
-        if(tired && !attacking)
+        if (tired && !attacking)
         {
             animator.SetTrigger(animID_tired);
             attacking = true;
@@ -111,7 +118,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
             attackID++;
 
-            if(attackID >= attacks_1.Length || attackID >= attacks_2.Length)
+            if (attackID >= attacks_1.Length || attackID >= attacks_2.Length)
             {
                 attackID = 0;
                 tired = true;
@@ -127,16 +134,17 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
 
-        if(attacking)
+        if (attacking)
         {
             animator.SetTrigger(animID_hit);
-        } else
+        }
+        else
         {
             animator.SetTrigger(animID_Fullhit);
         }
 
         hitpoints -= attack.damage;
-        if(hitpoints <= 0)
+        if (hitpoints <= 0)
         {
             OnEnemyDied?.Invoke();
         }

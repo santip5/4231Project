@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/PauseMenuStyle.uss?fileID=7433441132597879392&amp;guid=06634dd34f5daf146aca81e198d7cd4b&amp;type=3#PauseMenuStyle" />
+    <Style src="project://database/Assets/UI%20Toolkit/PauseMenuStyle.uss?fileID=7433441132597879392&amp;guid=2e607601949d56944995c0dea0b80a1e&amp;type=3#PauseMenuStyle" />
     <engine:VisualElement name="PauseMenu" style="flex-grow: 1; background-color: rgba(88, 76, 76, 0.8);">
         <engine:Label text="Paused" name="Pause" class="header" />
         <engine:Button text="Continue" name="ContinueButton" class="button" />
