@@ -75,6 +75,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         OnEnemyDied += Die;
 
         maxWidth = healthFillRect.rect.width;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -145,7 +147,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             animator.SetTrigger(animID_Fullhit);
         }
-
+            audioSource.clip = damageSoundClip;
+            audioSource.Play();
         hitpoints -= attack.damage;
         if (hitpoints <= 0)
         {
@@ -166,6 +169,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit))
         {
             hit.hit(attackList[current_attack]);
+    
         }
     }
 
