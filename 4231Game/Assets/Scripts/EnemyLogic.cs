@@ -22,6 +22,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     [SerializeField] private AudioClip damageSoundClip;
     private AudioSource audioSource;
 
+
     private int animID_attackID;
     private int animID_attack;
     private int animID_hit;
@@ -189,7 +190,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
                 }
 
                 hitpoints -= attack.damage;
-
+                audioSource.clip = damageSoundClip;
+                audioSource.Play();
                 if (!stunned && !dead)
                 {
                     stun -= attack.stun;
@@ -213,8 +215,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
                     }
                 }
                 hitpoints -= attack.damage;
-                audioSource.clip = damageSoundClip;
-                audioSource.Play();
                 if (hitpoints <= 0)
                 {
                     OnEnemyDied?.Invoke();
@@ -263,7 +263,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit))
         {
             hit.hit(attackList[current_attack]);
-    
+            audioSource.clip = damageSoundClip;
+            audioSource.Play();
         }
     }
 
