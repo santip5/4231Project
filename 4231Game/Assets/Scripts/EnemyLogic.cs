@@ -88,7 +88,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         animID_revenge = Animator.StringToHash("Revenge");
 
         agent = GetComponent<NavMeshAgent>();
-
+        audioSource = GetComponent<AudioSource>();
 
         hitpoints = hitpoints_max;
         stun = stun_max;
@@ -97,7 +97,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
         maxWidth = healthFillRect.rect.width;
 
-        audioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -190,8 +190,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
                 }
 
                 hitpoints -= attack.damage;
-                audioSource.clip = damageSoundClip;
-                audioSource.Play();
                 if (!stunned && !dead)
                 {
                     stun -= attack.stun;
@@ -248,6 +246,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         revenge_value = 0;
         revenge_accumulate = true;
         agent.isStopped = true;
+        audioSource.clip = damageSoundClip;
+        audioSource.Play();
     }
 
     private void init_attacks()
@@ -263,8 +263,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         if (collision.gameObject.TryGetComponent<IHittable>(out IHittable hit))
         {
             hit.hit(attackList[current_attack]);
-            audioSource.clip = damageSoundClip;
-            audioSource.Play();
+            
         }
     }
 
