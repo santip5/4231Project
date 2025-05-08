@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     private int animID_Fullhit;
     private int animID_dead;
     private int animID_tired;
+    private int animID_stunned;
+    private int animID_revenge;
 
     public List<Attack> attackList;
 
@@ -40,9 +43,18 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
     public int hitpoints_max;
     private int hitpoints;
+    public int stun_max;
+    public int stun;
+    public int revenge_threshold;
+    public int revenge_value;
+    public bool stunned;
+    private bool revenge_accumulate;
+    public bool revenge_move;
     private bool dead;
+    private bool runningRevenge;
 
     public Transform target;
+    private Vector3 revenge_move_target;
     public float rotateSpeed;
 
     private NavMeshAgent agent;
@@ -55,6 +67,11 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     {
         attacking = false;
         tired = false;
+        revenge_accumulate = false;
+        dead = false;
+        revenge_move = false;
+        stunned = false;
+        runningRevenge = false;
 
         init_attacks();
         attack_sequence = 1;
@@ -66,12 +83,15 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         animID_Fullhit = Animator.StringToHash("FullHit");
         animID_dead = Animator.StringToHash("Dead");
         animID_tired = Animator.StringToHash("Tired");
+        animID_stunned = Animator.StringToHash("stunned");
+        animID_revenge = Animator.StringToHash("Revenge");
 
         agent = GetComponent<NavMeshAgent>();
 
 
         hitpoints = hitpoints_max;
-        dead = false;
+        stun = stun_max;
+        revenge_value = 0;
         OnEnemyDied += Die;
 
         maxWidth = healthFillRect.rect.width;
@@ -86,6 +106,18 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             transform.LookAt(target);
         }
+
+        if (tired && !attacking && !stunned)
+        {
+            animator.SetTrigger(animID_tired);
+            stun = 0;
+            attacking = true;
+        }
+
+        if (!dead && revenge_move)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, revenge_move_target, 10 * Time.deltaTime);
+        }
         float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
         healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
     }
@@ -98,6 +130,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
     public void do_Attacks()
     {
+        if (!attacking && !dead && !stunned)
         if (tired && !attacking)
         {
             animator.SetTrigger(animID_tired);
@@ -138,22 +171,83 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+        if (!revenge_move && !runningRevenge)
+        {
+            if (attacking)
+            {
+                animator.SetTrigger(animID_hit);
+            }
+            else
+            {
+                if (attacking && !stunned && !dead)
+                {
+                    animator.SetTrigger(animID_hit);
+                }
+                else if (!stunned && !dead)
+                {
+                    animator.SetTrigger(animID_Fullhit);
+                }
 
-        if (attacking)
-        {
-            animator.SetTrigger(animID_hit);
+                hitpoints -= attack.damage;
+
+                if (!stunned && !dead)
+                {
+                    stun -= attack.stun;
+                }
+
+                if (hitpoints <= 0)
+                {
+                    OnEnemyDied?.Invoke();
+                }
+                else if (stun <= 0)
+                {
+                    getStunned();
+                }
+                else if (revenge_accumulate)
+                {
+                    revenge_value += attack.revenge;
+
+                    if (revenge_value >= revenge_threshold)
+                    {
+                        animator.SetTrigger(animID_revenge);
+                    }
+                }
+                hitpoints -= attack.damage;
+                audioSource.clip = damageSoundClip;
+                audioSource.Play();
+                if (hitpoints <= 0)
+                {
+                    OnEnemyDied?.Invoke();
+                }
+            }
         }
-        else
-        {
-            animator.SetTrigger(animID_Fullhit);
-        }
-            audioSource.clip = damageSoundClip;
-            audioSource.Play();
-        hitpoints -= attack.damage;
-        if (hitpoints <= 0)
-        {
-            OnEnemyDied?.Invoke();
-        }
+    }
+
+    public void takeRevenge()
+    {
+        animator.SetTrigger(animID_revenge);
+    }
+
+    //IEnumerator WaitRevengeMove()
+    //{
+    //    runningRevenge = true;
+    //    yield return new WaitForSeconds(3f);
+    //    animator.SetTrigger(animID_revenge);
+    //    revenge_move = true;
+    //    revenge_move_target = -transform.forward * 5;
+    //    yield return new WaitForSeconds(1f);
+    //    revenge_move = false;
+    //    agent.isStopped = false;
+    //    runningRevenge = false;
+    //}
+
+    private void getStunned()
+    {
+        animator.SetTrigger(animID_stunned);
+        stun = stun_max;
+        revenge_value = 0;
+        revenge_accumulate = true;
+        agent.isStopped = true;
     }
 
     private void init_attacks()
@@ -177,5 +271,20 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     {
         dead = true;
         animator.SetBool(animID_dead, true);
+    }
+
+    public void startRevengeMove()
+    {
+        stun = stun_max;
+        stunned = false;
+        revenge_move = true;
+        revenge_value=0;
+        revenge_move_target = -transform.forward * 5;
+    }
+
+    public void stopRevengeMove()
+    {
+        revenge_move = false;
+        agent.isStopped = false;
     }
 }

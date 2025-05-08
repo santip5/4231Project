@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.AI;
 
-public class EnemyTiredBehavior : StateMachineBehaviour
+public class RevengeMoveBehaviour : StateMachineBehaviour
 {
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        animator.GetComponentInParent<NavMeshAgent>(false).isStopped = true;
-    }
+    //// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    animator.transform.GetComponent<EnemyLogic>().stunned = false;
+    //    animator.transform.GetComponent<EnemyLogic>().takeRevenge();
+    //}
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -16,12 +16,10 @@ public class EnemyTiredBehavior : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        animator.gameObject.GetComponent<EnemyLogic>().attacking = false;
-        //animator.GetComponentInParent<NavMeshAgent>().isStopped = false;
-        animator.gameObject.GetComponent<EnemyLogic>().tired = false;
-    }
+    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+
+    //}
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
