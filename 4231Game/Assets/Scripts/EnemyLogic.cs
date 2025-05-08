@@ -132,12 +132,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void do_Attacks()
     {
         if (!attacking && !dead && !stunned)
-        if (tired && !attacking)
-        {
-            animator.SetTrigger(animID_tired);
-            attacking = true;
-        }
-        else if (!attacking && !dead)
         {
             attacking = true;
 
@@ -172,50 +166,40 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
+
         if (!revenge_move && !runningRevenge)
         {
-            if (attacking)
+            if (attacking && !stunned && !dead)
             {
                 animator.SetTrigger(animID_hit);
             }
-            else
+            else if (!stunned && !dead)
             {
-                if (attacking && !stunned && !dead)
-                {
-                    animator.SetTrigger(animID_hit);
-                }
-                else if (!stunned && !dead)
-                {
-                    animator.SetTrigger(animID_Fullhit);
-                }
+                animator.SetTrigger(animID_Fullhit);
+            }
 
-                hitpoints -= attack.damage;
-                if (!stunned && !dead)
-                {
-                    stun -= attack.stun;
-                }
+            hitpoints -= attack.damage;
 
-                if (hitpoints <= 0)
-                {
-                    OnEnemyDied?.Invoke();
-                }
-                else if (stun <= 0)
-                {
-                    getStunned();
-                }
-                else if (revenge_accumulate)
-                {
-                    revenge_value += attack.revenge;
+            if (!stunned && !dead)
+            {
+                stun -= attack.stun;
+            }
 
-                    if (revenge_value >= revenge_threshold)
-                    {
-                        animator.SetTrigger(animID_revenge);
-                    }
-                }
-                hitpoints -= attack.damage;
-                if (hitpoints <= 0)
+            if (hitpoints <= 0)
+            {
+                OnEnemyDied?.Invoke();
+            }
+            else if (stun <= 0)
+            {
+                getStunned();
+            }
+            else if (revenge_accumulate)
+            {
+                revenge_value += attack.revenge;
+
+                if (revenge_value >= revenge_threshold)
                 {
-                    OnEnemyDied?.Invoke();
+                    animator.SetTrigger(animID_revenge);
                 }
             }
         }
