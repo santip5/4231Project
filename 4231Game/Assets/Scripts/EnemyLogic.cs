@@ -16,11 +16,11 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     [SerializeField]
     private int attackID = 0;
 
-    [SerializeField]
-    private Animator animator;
-
     [SerializeField] private AudioClip damageSoundClip;
     private AudioSource audioSource;
+
+    [SerializeField]
+    private Animator animator;
 
 
     private int animID_attackID;
@@ -179,7 +179,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
             }
 
             hitpoints -= attack.damage;
-
+            audioSource.clip = damageSoundClip;
+            audioSource.Play();
             if (!stunned && !dead)
             {
                 stun -= attack.stun;
@@ -230,8 +231,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         revenge_value = 0;
         revenge_accumulate = true;
         agent.isStopped = true;
-        audioSource.clip = damageSoundClip;
-        audioSource.Play();
     }
 
     private void init_attacks()

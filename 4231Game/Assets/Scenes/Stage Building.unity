@@ -81635,7 +81635,7 @@ PrefabInstance:
       addedObject: {fileID: 1525238762}
     - targetCorrespondingSourceObject: {fileID: 5811961743881507116, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1525238764}
+      addedObject: {fileID: 1525238769}
   m_SourcePrefab: {fileID: 100100000, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
 --- !u!1 &1525238757 stripped
 GameObject:
@@ -81698,7 +81698,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!82 &1525238764
+--- !u!82 &1525238769
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
