@@ -1729,16 +1729,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: tired
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 363371114}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: stun_max
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: attacking
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: rotateSpeed
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: hitpoints_max
-      value: 20
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
+      propertyPath: revenge_threshold
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8602489520340406190, guid: a7f319d2c358cc74488bb738590d28cf, type: 3}
       propertyPath: 'attacks_1.Array.data[1]'
