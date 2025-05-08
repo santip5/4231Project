@@ -18,6 +18,9 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     [SerializeField]
     private Animator animator;
 
+    [SerializeField] private AudioClip damageSoundClip;
+    private AudioSource audioSource;
+
     private int animID_attackID;
     private int animID_attack;
     private int animID_hit;
@@ -31,6 +34,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public bool attacking;
     [DoNotSerialize]
     public bool tired;
+
 
     public int hitpoints_max;
     private int hitpoints;
@@ -67,6 +71,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         hitpoints = hitpoints_max;
         dead = false;
         OnEnemyDied += Die;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -136,6 +142,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         }
 
         hitpoints -= attack.damage;
+        audioSource.clip = damageSoundClip;
+        audioSource.Play();
         if(hitpoints <= 0)
         {
             OnEnemyDied?.Invoke();
