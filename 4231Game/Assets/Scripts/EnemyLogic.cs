@@ -19,6 +19,9 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     [SerializeField]
     private Animator animator;
 
+    [SerializeField] private AudioClip damageSoundClip;
+    private AudioSource audioSource;
+
     private int animID_attackID;
     private int animID_attack;
     private int animID_hit;
@@ -29,11 +32,14 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     private int animID_revenge;
 
     public List<Attack> attackList;
-    
+
     [DoNotSerialize]
     public bool attacking;
     [DoNotSerialize]
     public bool tired;
+
+    [SerializeField] private RectTransform healthFillRect;
+    [SerializeField] private float maxWidth = 500f;
 
     public int hitpoints_max;
     private int hitpoints;
@@ -87,6 +93,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         stun = stun_max;
         revenge_value = 0;
         OnEnemyDied += Die;
+
+        maxWidth = healthFillRect.rect.width;
     }
 
     // Update is called once per frame
@@ -96,7 +104,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             transform.LookAt(target);
         }
-
 
         if (tired && !attacking && !stunned)
         {
@@ -109,6 +116,8 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             transform.position = Vector3.MoveTowards(transform.position, revenge_move_target, 10 * Time.deltaTime);
         }
+        float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
+        healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
     }
 
     void OnDisable()
@@ -120,6 +129,12 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void do_Attacks()
     {
         if (!attacking && !dead && !stunned)
+        if (tired && !attacking)
+        {
+            animator.SetTrigger(animID_tired);
+            attacking = true;
+        }
+        else if (!attacking && !dead)
         {
             attacking = true;
 
@@ -139,7 +154,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
 
             attackID++;
 
-            if(attackID >= attacks_1.Length || attackID >= attacks_2.Length)
+            if (attackID >= attacks_1.Length || attackID >= attacks_2.Length)
             {
                 attackID = 0;
                 tired = true;
@@ -154,8 +169,12 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
     public void hit(Attack attack)
     {
         Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
-
         if (!revenge_move && !runningRevenge)
+        if (attacking)
+        {
+            animator.SetTrigger(animID_hit);
+        }
+        else
         {
             if (attacking && !stunned && !dead)
             {
@@ -190,6 +209,10 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
                     animator.SetTrigger(animID_revenge);
                 }
             } 
+        hitpoints -= attack.damage;
+        if (hitpoints <= 0)
+        {
+            OnEnemyDied?.Invoke();
         }
     }
 

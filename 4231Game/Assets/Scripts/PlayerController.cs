@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     [DoNotSerialize]
     public bool dashSpeedOn;
 
+    [SerializeField] private RectTransform healthFillRect;
+    [SerializeField] private float maxWidth = 500f;
+
     public delegate void Death();
     public static event Death OnPlayerDied;
 
@@ -71,6 +74,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         pause_input = false;
         OnPlayerDied += Die;
         EnemyLogic.OnEnemyDied += VictoryAnim;
+
+        maxWidth = healthFillRect.rect.width;
     }
 
     void OnDisable()
@@ -132,6 +137,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
                 animator.SetTrigger(animID_armBlock);
             } 
         }
+
+        float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
+        healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
     }
 
     void MoveRelativeToCamera()

@@ -16,6 +16,9 @@ public class AttackCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (collision.transform.root == attacker.transform)
+            return;
+
         if (active && attackerI != null)
         {
             attackerI.attackCollision(ID, collision);
