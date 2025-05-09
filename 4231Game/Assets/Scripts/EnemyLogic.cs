@@ -119,8 +119,10 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         {
             transform.position = Vector3.MoveTowards(transform.position, revenge_move_target, 10 * Time.deltaTime);
         }
+
         float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
         healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
+ 
     }
 
     void OnDisable()
@@ -269,4 +271,6 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
         revenge_move = false;
         agent.isStopped = false;
     }
+
+
 }

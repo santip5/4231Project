@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log($"{gameObject.name} HealthFill Width at Start: {healthFillRect.rect.width}");
         animID_running = Animator.StringToHash("running");
         animID_attack = Animator.StringToHash("Attack");
         animID_attackID = Animator.StringToHash("AttackID");
@@ -75,11 +76,11 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         attackIndex = 0;
         LoadAttackList();
 
-        //Attack1IDList = new int[SaveManager.Instance.passedAttacks.Length];
-        //for (int i = 0; i < Attack1IDList.Length; i++)
-        //{
-        //    Attack1IDList[i] = SaveManager.Instance.passedAttacks[i];
-        //}
+        Attack1IDList = new int[SaveManager.Instance.passedAttacks.Length];
+        for (int i = 0; i < Attack1IDList.Length; i++)
+        {
+            Attack1IDList[i] = SaveManager.Instance.passedAttacks[i];
+        }
 
         hitpoints = hitpoints_max;
         pause_input = false;
@@ -93,6 +94,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         StartCoroutine(activateControls());
 
         Sound = GetComponent<AudioSource>();
+
     }
 
     void OnDisable()
@@ -158,6 +160,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
 
         float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
         healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
+
+       
     }
 
     void MoveRelativeToCamera()
@@ -222,9 +226,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         */
 
         attackList = new List<Attack>();
-        attackList.Add(new Attack(10, 2, 1, false, 0));
+        attackList.Add(new Attack(10, 0, 1, false, 0));
         attackList.Add(new Attack(20, 1, 3, false, 1));
-        attackList.Add(new Attack(30, 0, 5, false, 2));
+        attackList.Add(new Attack(30, 2, 5, false, 2));
     }
 
     public void hit(Attack attack)
@@ -280,4 +284,6 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         yield return null;
         Sound.Play();
     }
+
+    
 }
