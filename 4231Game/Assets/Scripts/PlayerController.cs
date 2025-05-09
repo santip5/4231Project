@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     private int hitpoints;
     private bool pause_input;
 
+    private PlayerInput playerInput;
+
     public float moveSpeed;
     public float rotateSpeed;
     private Vector2 moveDirection;
@@ -70,12 +72,22 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         attackIndex = 0;
         LoadAttackList();
 
+        Attack1IDList = new int[SaveManager.Instance.passedAttacks.Length];
+        for (int i = 0; i < Attack1IDList.Length; i++)
+        {
+            Attack1IDList[i] = SaveManager.Instance.passedAttacks[i];
+        }
+
         hitpoints = hitpoints_max;
         pause_input = false;
         OnPlayerDied += Die;
         EnemyLogic.OnEnemyDied += VictoryAnim;
 
         maxWidth = healthFillRect.rect.width;
+
+        playerInput = GetComponent<PlayerInput>();
+        playerInput.enabled = false;
+        StartCoroutine(activateControls());
     }
 
     void OnDisable()
@@ -87,8 +99,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     // Update is called once per frame
     void Update()
     {
-        if (!pause_input)
-        {
+        Debug.Log($"Move enabled? {move.action.enabled}");
+        //if (!pause_input)
+        //{
             if (!attacking)
             {
                 moveDirection = move.action.ReadValue<Vector2>();
@@ -136,7 +149,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
                 animator.SetTrigger(animID_dash);
                 animator.SetTrigger(animID_armBlock);
             } 
-        }
+        //}
 
         float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
         healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
@@ -247,5 +260,11 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         yield return new WaitForSeconds(5.0f);
 
         animator.SetTrigger(animID_victory);
+    }
+
+    IEnumerator activateControls()
+    {
+        yield return null;
+        playerInput.enabled = true;
     }
 }
