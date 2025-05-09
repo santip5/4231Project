@@ -179,8 +179,7 @@ public class EnemyLogic : MonoBehaviour, IHittable, IAttacker
             }
 
             hitpoints -= attack.damage;
-            audioSource.clip = damageSoundClip;
-            audioSource.Play();
+            audioSource.PlayOneShot(damageSoundClip, 0.5f);
             if (!stunned && !dead)
             {
                 stun -= attack.stun;

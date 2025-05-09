@@ -51,6 +51,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     [SerializeField] private RectTransform healthFillRect;
     [SerializeField] private float maxWidth = 500f;
 
+    public AudioClip getHitSound;
+    public AudioSource Sound;
+
     public delegate void Death();
     public static event Death OnPlayerDied;
 
@@ -72,11 +75,11 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         attackIndex = 0;
         LoadAttackList();
 
-        Attack1IDList = new int[SaveManager.Instance.passedAttacks.Length];
-        for (int i = 0; i < Attack1IDList.Length; i++)
-        {
-            Attack1IDList[i] = SaveManager.Instance.passedAttacks[i];
-        }
+        //Attack1IDList = new int[SaveManager.Instance.passedAttacks.Length];
+        //for (int i = 0; i < Attack1IDList.Length; i++)
+        //{
+        //    Attack1IDList[i] = SaveManager.Instance.passedAttacks[i];
+        //}
 
         hitpoints = hitpoints_max;
         pause_input = false;
@@ -88,6 +91,8 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
         playerInput = GetComponent<PlayerInput>();
         playerInput.enabled = false;
         StartCoroutine(activateControls());
+
+        Sound = GetComponent<AudioSource>();
     }
 
     void OnDisable()
@@ -99,9 +104,9 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     // Update is called once per frame
     void Update()
     {
-        Debug.Log($"Move enabled? {move.action.enabled}");
-        //if (!pause_input)
-        //{
+        
+        if (!pause_input)
+        {
             if (!attacking)
             {
                 moveDirection = move.action.ReadValue<Vector2>();
@@ -149,7 +154,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
                 animator.SetTrigger(animID_dash);
                 animator.SetTrigger(animID_armBlock);
             } 
-        //}
+        }
 
         float percent = Mathf.Clamp01((float)hitpoints / hitpoints_max);
         healthFillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * percent);
@@ -229,6 +234,7 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
             Debug.Log($"Damge: {attack.damage}\n Stun: {attack.stun}\n Revenge: {attack.revenge}\n ID: {attack.attackID}\n Special: {attack.isSpecial}");
             animator.SetTrigger(animID_hit);
             hitpoints -= attack.damage;
+            Sound.PlayOneShot(getHitSound, 1f);
         }
 
         if(hitpoints <= 0)
@@ -266,5 +272,12 @@ public class PlayerController : MonoBehaviour, IAttacker, IHittable
     {
         yield return null;
         playerInput.enabled = true;
+    }
+
+    private IEnumerator IPlayBGM()
+    {
+        //Unity can’t change volume of Audio Source Component instantly with no reason!
+        yield return null;
+        Sound.Play();
     }
 }
