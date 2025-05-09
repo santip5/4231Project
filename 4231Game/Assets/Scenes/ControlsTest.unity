@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -241,7 +241,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -53798738897908335, guid: 978229480925a8042ae4a334e99d999e, type: 3}
-    - {fileID: 2627722985029447280, guid: 978229480925a8042ae4a334e99d999e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -479,7 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7046fc31d8765904b8524965211be8ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveManager: {fileID: 0}
+  SaveManager: {fileID: 466801694}
 --- !u!1 &1820998392 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 996776721053632173, guid: 978229480925a8042ae4a334e99d999e, type: 3}
@@ -759,5 +758,5 @@ SceneRoots:
   - {fileID: 954445724}
   - {fileID: 2014206749}
   - {fileID: 245499330}
-  - {fileID: 1269548295}
   - {fileID: 466801693}
+  - {fileID: 1269548295}

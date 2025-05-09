@@ -20,6 +20,12 @@ public class ControlsMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("ControlsMenu OnEnable");
+
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("SaveManager.Instance is null at Start!");
+        }
         root = GetComponent<UIDocument>().rootVisualElement;
         playerAttackSequence = FindFirstObjectByType<ControlsDummy>();
 
